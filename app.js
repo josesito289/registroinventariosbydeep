@@ -126,7 +126,7 @@ function orderedProducts(bodega, cats) {
     if (bodega && p.bodega !== bodega) return false;
     return true;
   });
-  var ord = state.orders[bodega || ''] || [];
+  var ord = state.orders[''] || [];
   var idx = new Map();
   ord.forEach(function (id, i) { idx.set(id, i); });
   list.sort(function (a, b) {
@@ -862,13 +862,12 @@ function onInvClick(e) {
 function moveProduct(idA, idB) {
   var pa = productById(idA), pb = productById(idB);
   if (!pa || !pb) return;
-  if (pa.bodega !== pb.bodega) return; // no mezclar bodegas
 
-  var full = orderedProducts(pa.bodega, []).map(function (p) { return p.id; });
+  var full = orderedProducts(null, []).map(function (p) { return p.id; });
   var a = full.indexOf(idA), b = full.indexOf(idB);
   if (a < 0 || b < 0) return;
   var tmp = full[a]; full[a] = full[b]; full[b] = tmp;
-  state.orders[pa.bodega] = full;
+  state.orders[''] = full;
   saveState();
   renderInv('ingreso');
   renderInv('camara');
