@@ -1,5 +1,5 @@
 /* Service Worker — Registro de Inventarios */
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 const CACHE = 'registro-inventarios-' + VERSION;
 
 const ASSETS = [
