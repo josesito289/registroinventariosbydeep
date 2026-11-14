@@ -1,0 +1,36 @@
+
+---
+
+## 9. `CHANGELOG.md`
+
+```markdown
+# Changelog
+
+Todos los cambios relevantes de este proyecto se documentan aquí.
+Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
+Versionado [SemVer](https://semver.org/lang/es/).
+
+## [1.0.0] — 2026-01-01
+
+### Añadido
+- PWA instalable con `manifest.json` (`id` explícito `/registroinventariosbydeep/`).
+- Service Worker con caché offline y actualización por versión.
+- Pestaña 1 — Ingreso de datos:
+  - Carga de productos por CSV (separador `;` o `,`, BOM, `null` como vacío).
+  - Filtro multi-categoría y por bodega.
+  - Cantidades: Cajas / Tiras-Paquetes / Unidades.
+  - Columnas de diferencia Δ contra el último registro existente.
+  - Reordenamiento ▲▼ persistente por bodega.
+  - Guardado diario con alertas informativas (productos sin datos y variación de total).
+  - Reporte diario, reporte histórico (respaldo) e importación de histórico.
+- Pestaña 2 — Cámara: lectura de código de barras que resalta y enfoca el producto.
+- Pestaña 3 — Histórico: consultas diaria, semanal, mensual y anual con variaciones.
+- Pestaña 4 — Registro de códigos de barras (cámara, manual, eliminar).
+- Tema claro/oscuro con persistencia y respeto a `prefers-color-scheme`.
+- Exportación en JSON, CSV (`;` + BOM) y TXT (tabulado).
+- Respaldo JSON que incluye productos, orden personalizado y códigos de barras.
+- Guardado del borrador de cantidades durante la sesión del día.
+
+### Notas
+- El cálculo de diferencias usa el último registro existente, no necesariamente el día anterior.
+- El lector usa `BarcodeDetector`; se recomienda Chrome en Android 8+.

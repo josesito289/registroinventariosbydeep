@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Registro de Inventarios</title>
+<meta name="theme-color" content="#1f4e79">
+<meta name="description" content="Registro de inventarios físicos. Exporta JSON, CSV o TXT.">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand">
+    <span class="logo">RI</span>
+    <div class="brand-txt">
+      <h1>Registro de Inventarios</h1>
+      <p class="sub" id="headerSub">—</p>
+    </div>
+  </div>
+  <button id="btnTheme" class="btn btn-ghost" title="Cambiar tema">Oscuro</button>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button class="tab active" data-tab="ingreso" role="tab">Ingreso</button>
+  <button class="tab" data-tab="camara" role="tab">Cámara</button>
+  <button class="tab" data-tab="historico" role="tab">Histórico</button>
+  <button class="tab" data-tab="codigos" role="tab">Códigos</button>
+</nav>
+
+<main>
+
+  <!-- ============ PESTAÑA 1 ============ -->
+  <section id="panel-ingreso" class="panel active">
+    <div class="card">
+      <div class="row">
+        <button id="btnCsv" class="btn">Cargar productos (CSV)</button>
+        <input id="fileCsv" type="file" accept=".csv,text/plain" hidden>
+        <span class="hint" id="csvInfo">Sin productos cargados.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="field">
+        <label class="lbl">Categorías</label>
+        <div id="catsIngreso" class="chips"></div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="bodegaIngreso">Bodega</label>
+        <select id="bodegaIngreso"></select>
+      </div>
+    </div>
+
+    <div class="list-head">
+      <span class="lh-prod">Producto · orden</span>
+      <span class="lh-qty">Cajas · Tiras/Paq. · Unidades</span>
+      <span class="lh-dif">Δ vs. último registro</span>
+    </div>
+
+    <div id="listIngreso" class="product-list"></div>
+
+    <div class="actions">
+      <button id="btnGuardarIngreso" class="btn btn-primary">Guardar registro del día</button>
+      <select id="fmtIngreso" class="fmt" title="Formato de exportación">
+        <option value="json">JSON</option>
+        <option value="csv">CSV</option>
+        <option value="txt">TXT</option>
+      </select>
+      <button id="btnDiarioIngreso" class="btn">Reporte diario</button>
+      <button id="btnHistIngreso" class="btn">Reporte histórico</button>
+      <button id="btnImportIngreso" class="btn">Importar histórico</button>
+      <input id="fileImportIngreso" type="file" accept=".json,application/json" hidden>
+    </div>
+  </section>
+
+  <!-- ============ PESTAÑA 2 ============ -->
+  <section id="panel-camara" class="panel">
+    <div class="card">
+      <div class="row">
+        <button id="btnScanCamara" class="btn btn-primary">Activar cámara (código de barras)</button>
+        <span class="hint">Escanea y el producto se resalta automáticamente.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="field">
+        <label class="lbl">Categorías</label>
+        <div id="catsCamara" class="chips"></div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="bodegaCamara">Bodega</label>
+        <select id="bodegaCamara"></select>
+      </div>
+    </div>
+
+    <div class="list-head">
+      <span class="lh-prod">Producto · orden</span>
+      <span class="lh-qty">Cajas · Tiras/Paq. · Unidades</span>
+      <span class="lh-dif">Δ vs. último registro</span>
+    </div>
+
+    <div id="listCamara" class="product-list"></div>
+
+    <div class="actions">
+      <button id="btnGuardarCamara" class="btn btn-primary">Guardar registro del día</button>
+      <select id="fmtCamara" class="fmt" title="Formato de exportación">
+        <option value="json">JSON</option>
+        <option value="csv">CSV</option>
+        <option value="txt">TXT</option>
+      </select>
+      <button id="btnDiarioCamara" class="btn">Reporte diario</button>
+      <button id="btnHistCamara" class="btn">Reporte histórico</button>
+      <button id="btnImportCamara" class="btn">Importar histórico</button>
+      <input id="fileImportCamara" type="file" accept=".json,application/json" hidden>
+    </div>
+  </section>
+
+  <!-- ============ PESTAÑA 3 ============ -->
+  <section id="panel-historico" class="panel">
+    <div class="card">
+      <div class="field">
+        <label class="lbl">Categorías</label>
+        <div id="catsHist" class="chips"></div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="bodegaHist">Bodega</label>
+        <select id="bodegaHist"></select>
+      </div>
+      <div class="field">
+        <label class="lbl" for="tipoHist">Tipo de reporte</label>
+        <select id="tipoHist">
+          <option value="diario">Diario</option>
+          <option value="semanal">Semanal</option>
+          <option value="mensual">Mensual</option>
+          <option value="anual">Anual</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="lbl">Periodo</label>
+        <div class="period">
+          <input id="fechaDia" type="date">
+          <input id="fechaSemana" type="week" hidden>
+          <input id="fechaMes" type="month" hidden>
+          <input id="fechaAnio" type="number" min="2000" max="2100" hidden>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint" id="histSummary"></p>
+    <div id="histList" class="product-list"></div>
+  </section>
+
+  <!-- ============ PESTAÑA 4 ============ -->
+  <section id="panel-codigos" class="panel">
+    <div class="card">
+      <div class="field">
+        <label class="lbl">Categorías</label>
+        <div id="catsCod" class="chips"></div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="bodegaCod">Bodega</label>
+        <select id="bodegaCod"></select>
+      </div>
+    </div>
+
+    <div id="listCod" class="product-list"></div>
+    <p class="hint footer-ver" id="appVersion"></p>
+  </section>
+
+</main>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+
+<!-- Modal del escáner -->
+<div id="scannerModal" class="modal" hidden>
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>Escanear código de barras</h3>
+      <button id="scanClose" class="icon-btn close" title="Cerrar">✕</button>
+    </div>
+    <div class="scan-wrap">
+      <video id="scanVideo" playsinline muted autoplay></video>
+      <div class="scan-frame"></div>
+    </div>
+    <p id="scanMsg" class="hint">Iniciando cámara…</p>
+    <div class="scan-manual">
+      <input id="scanManual" type="text" inputmode="numeric" autocomplete="off" placeholder="Código manual">
+      <button id="scanManualOk" class="btn btn-primary">Usar</button>
+    </div>
+  </div>
+</div>
+
+<script src="./scanner.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>
